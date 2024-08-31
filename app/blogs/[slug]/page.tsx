@@ -1,5 +1,8 @@
 export const revalidate = 3600;
 
+import Link from "next/link";
+import type { Metadata } from "next";
+
 import {
   Pagination,
   PaginationContent,
@@ -8,28 +11,64 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { LIMIT } from "@/lib/constants";
-import { getLatestPosts, getSpecialPost } from "@/lib/actions";
+import { getCategory, getPostsByCategory } from "@/lib/actions";
 import PostCard from "@/components/main/post-card";
-import SpecialPost from "@/components/main/special-post";
 
-const Home = async ({ searchParams }: { searchParams: { page: string } }) => {
-  const [posts, specialPost] = await Promise.all([
-    getLatestPosts(Number(searchParams.page)),
-    getSpecialPost(),
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  // fetch data
+  const category = await getCategory(params.slug);
+
+  return {
+    title: category?.fields.name,
+  };
+}
+
+const BlogCategory = async ({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { page: string };
+}) => {
+  const [category, blogs] = await Promise.all([
+    getCategory(params.slug),
+    getPostsByCategory(params.slug, Number(searchParams.page)),
   ]);
 
-  const getCanNext = posts.length === LIMIT;
+  const getCanNext = blogs.length === LIMIT;
   const getCanPrevious = Number(searchParams.page) > 1;
 
   return (
-    <section className="py-6">
-      {specialPost && <SpecialPost post={specialPost} />}
-
-      <h2>أحدث المقالات</h2>
-      {posts.length > 0 ? (
+    <section>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">الرئيسية</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{category?.fields.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      {blogs.length > 0 ? (
         <div className="grid grid-col-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          {posts.map((blog) => (
+          {blogs.map((blog) => (
             <PostCard key={blog.fields.slug} post={blog} />
           ))}
         </div>
@@ -41,7 +80,7 @@ const Home = async ({ searchParams }: { searchParams: { page: string } }) => {
           {getCanPrevious && (
             <PaginationItem>
               <PaginationPrevious
-                href={`/${
+                href={`/blogs/${params.slug}${
                   Number(searchParams.page) === 2
                     ? ""
                     : `?page=${Number(searchParams.page) - 1}`
@@ -52,7 +91,7 @@ const Home = async ({ searchParams }: { searchParams: { page: string } }) => {
           {getCanPrevious && (
             <PaginationItem>
               <PaginationLink
-                href={`/${
+                href={`/blogs/${params.slug}${
                   Number(searchParams.page) === 2
                     ? ""
                     : `?page=${Number(searchParams.page) - 1}`
@@ -70,7 +109,9 @@ const Home = async ({ searchParams }: { searchParams: { page: string } }) => {
           {getCanNext && (
             <PaginationItem>
               <PaginationLink
-                href={`/?page=${Number(searchParams.page ?? 1) + 1}`}
+                href={`/blogs/${params.slug}?page=${
+                  Number(searchParams.page ?? 1) + 1
+                }`}
               >
                 {Number(searchParams.page ?? 1) + 1}
               </PaginationLink>
@@ -82,7 +123,9 @@ const Home = async ({ searchParams }: { searchParams: { page: string } }) => {
           {getCanNext && (
             <PaginationItem>
               <PaginationNext
-                href={`/?page=${Number(searchParams.page ?? 1) + 1}`}
+                href={`/blogs/${params.slug}?page=${
+                  Number(searchParams.page ?? 1) + 1
+                }`}
               />
             </PaginationItem>
           )}
@@ -91,4 +134,4 @@ const Home = async ({ searchParams }: { searchParams: { page: string } }) => {
     </section>
   );
 };
-export default Home;
+export default BlogCategory;
