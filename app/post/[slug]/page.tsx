@@ -40,9 +40,8 @@ export async function generateMetadata({
 }
 
 const Post = async ({ params }: { params: { slug: string } }) => {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const { post, isEnabled } = await getPost(params.slug);
-
-  console.log(post);
 
   return (
     <section>
