@@ -33,6 +33,9 @@ export async function generateMetadata({
 
   return {
     title: category?.fields.name,
+    alternates: {
+      canonical: `/blogs/${params.slug}`,
+    },
   };
 }
 

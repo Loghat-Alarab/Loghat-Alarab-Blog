@@ -24,8 +24,6 @@ export async function generateMetadata({
   // fetch data
   const { post } = await getPost(params.slug);
 
-  console.log(`https:${(post.fields.coverImage as IAsset).fields.file.url}`);
-
   return {
     title: post.fields.title,
     description: post.fields.description,
@@ -35,6 +33,9 @@ export async function generateMetadata({
       images: [
         { url: `https:${(post.fields.coverImage as IAsset).fields.file.url}` },
       ],
+    },
+    alternates: {
+      canonical: `/post/${params.slug}`,
     },
   };
 }
