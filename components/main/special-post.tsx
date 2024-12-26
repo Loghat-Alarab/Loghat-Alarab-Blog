@@ -26,14 +26,15 @@ const SpecialPost = ({
                   (post.fields.coverImage as IAsset).fields.file.url
                 }`}
                 alt={(post.fields.coverImage as IAsset).fields.title}
-                width={
-                  (post.fields.coverImage as IAsset).fields.file.details.image
-                    .width
-                }
-                height={
-                  (post.fields.coverImage as IAsset).fields.file.details.image
-                    .height
-                }
+                // width={
+                //   (post.fields.coverImage as IAsset).fields.file.details.image
+                //     .width
+                // }
+                // height={
+                //   (post.fields.coverImage as IAsset).fields.file.details.image
+                //     .height
+                // }
+                fill
                 className="rounded-md object-cover w-full"
               />
             </AspectRatio>
