@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import PostSkeleton from "@/components/main/post-skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import PostSkeleton from "@/components/main/post-skeleton";
 
 const Loading = () => {
   return (

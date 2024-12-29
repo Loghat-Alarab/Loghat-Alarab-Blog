@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 
-import Logo from "./logo";
+import Link from "next/link";
 
 import {
   DropdownMenu,
@@ -14,6 +13,8 @@ import {
 import { ThemeToggle } from "./theme-toggle";
 import { getCategories } from "@/lib/actions";
 import { Button } from "@/components/ui/button";
+
+import Logo from "./logo";
 import MobileNav from "./mobile-nav";
 import SearchInput from "./search-input";
 
@@ -42,7 +43,7 @@ const Navbar = async () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost">
                   مقالات
-                  <ChevronDown size={15} className="mr-2" />
+                  <ChevronDown size={15} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -69,7 +70,7 @@ const Navbar = async () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost">
                   شخصيات
-                  <ChevronDown size={15} className="mr-2" />
+                  <ChevronDown size={15} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -96,7 +97,7 @@ const Navbar = async () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost">
                   قصص و عبر
-                  <ChevronDown size={15} className="mr-2" />
+                  <ChevronDown size={15} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>

@@ -1,6 +1,8 @@
-import RichText from "./rich-text";
 import { Entry } from "contentful";
+
 import { PostEntrySkeleton } from "@/types";
+
+import RichText from "./rich-text";
 
 const PostBody = ({
   post,

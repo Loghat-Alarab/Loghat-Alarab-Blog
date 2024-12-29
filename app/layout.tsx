@@ -1,14 +1,13 @@
-export const revalidate = 3600;
-
 import type { Metadata } from "next";
 import { Almarai } from "next/font/google";
 
 import "./globals.css";
 
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/providers/theme-provider";
+
 import Navbar from "@/components/main/navbar";
 import Footer from "@/components/main/footer";
-import { ThemeProvider } from "@/providers/theme-provider";
 
 const alamari = Almarai({
   subsets: ["arabic"],
@@ -29,23 +28,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  // icons: {
-  //   apple: "/apple-touch-icon.png",
-  // },
-  // openGraph: {
-  //   images: [
-  //     "/logo.png",
-  //     {
-  //       url: "https://res.cloudinary.com/dddlfnsoe/image/upload/v1711403718/Asset_1_w4pvpd.png",
-  //     },
-  //   ],
-  // },
-  // icons: [
-  //   {
-  //     url: "/Black_Icon.svg",
-  //     href: "/Black_Icon.svg",
-  //   },
-  // ],
 };
 
 export default function RootLayout({

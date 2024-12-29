@@ -22,7 +22,7 @@ const options: Options = {
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (
         node.content.find((item) =>
-          // @ts-ignore
+          // @ts-expect-error not finding mark
           item.marks?.find((mark) => mark.type === "code")
         )
       ) {

@@ -1,7 +1,6 @@
-export const revalidate = 3600;
+import type { Metadata } from "next";
 
 import Link from "next/link";
-import type { Metadata } from "next";
 
 import {
   Pagination,
@@ -19,22 +18,24 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { LIMIT } from "@/lib/constants";
+import { LIMIT } from "@/constants";
 import { getCategory, getPostsByCategory } from "@/lib/actions";
+
 import PostCard from "@/components/main/post-card";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   // fetch data
-  const category = await getCategory(params.slug);
+  const slug = (await params).slug;
+  const category = await getCategory(slug);
 
   return {
     title: category?.fields.name,
     alternates: {
-      canonical: `/characters/${params.slug}`,
+      canonical: `/characters/${slug}`,
     },
   };
 }
@@ -43,16 +44,19 @@ const BlogCategory = async ({
   params,
   searchParams,
 }: {
-  params: { slug: string };
-  searchParams: { page: string };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page: string }>;
 }) => {
+  const slug = (await params).slug;
+  const page = (await searchParams).page;
+
   const [category, characters] = await Promise.all([
-    getCategory(params.slug),
-    getPostsByCategory(params.slug, Number(searchParams.page)),
+    getCategory(slug),
+    getPostsByCategory(slug, Number(page)),
   ]);
 
   const getCanNext = characters.length === LIMIT;
-  const getCanPrevious = Number(searchParams.page) > 1;
+  const getCanPrevious = Number(page) > 1;
 
   return (
     <section>
@@ -83,10 +87,8 @@ const BlogCategory = async ({
           {getCanPrevious && (
             <PaginationItem>
               <PaginationPrevious
-                href={`/characters/${params.slug}${
-                  Number(searchParams.page) === 2
-                    ? ""
-                    : `?page=${Number(searchParams.page) - 1}`
+                href={`/characters/${slug}${
+                  Number(page) === 2 ? "" : `?page=${Number(page) - 1}`
                 }`}
               />
             </PaginationItem>
@@ -94,29 +96,25 @@ const BlogCategory = async ({
           {getCanPrevious && (
             <PaginationItem>
               <PaginationLink
-                href={`/characters/${params.slug}${
-                  Number(searchParams.page) === 2
-                    ? ""
-                    : `?page=${Number(searchParams.page) - 1}`
+                href={`/characters/${slug}${
+                  Number(page) === 2 ? "" : `?page=${Number(page) - 1}`
                 }`}
               >
-                {Number(searchParams.page) - 1}
+                {Number(page) - 1}
               </PaginationLink>
             </PaginationItem>
           )}
           <PaginationItem>
             <PaginationLink href="#" isActive>
-              {searchParams.page ?? 1}
+              {page ?? 1}
             </PaginationLink>
           </PaginationItem>
           {getCanNext && (
             <PaginationItem>
               <PaginationLink
-                href={`/characters/${params.slug}?page=${
-                  Number(searchParams.page ?? 1) + 1
-                }`}
+                href={`/characters/${slug}?page=${Number(page ?? 1) + 1}`}
               >
-                {Number(searchParams.page ?? 1) + 1}
+                {Number(page ?? 1) + 1}
               </PaginationLink>
             </PaginationItem>
           )}
@@ -126,9 +124,7 @@ const BlogCategory = async ({
           {getCanNext && (
             <PaginationItem>
               <PaginationNext
-                href={`/characters/${params.slug}?page=${
-                  Number(searchParams.page ?? 1) + 1
-                }`}
+                href={`/characters/${slug}?page=${Number(page ?? 1) + 1}`}
               />
             </PaginationItem>
           )}

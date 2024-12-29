@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import { Entry } from "contentful";
+
+import Link from "next/link";
 
 import {
   Card,
@@ -9,10 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { IAsset, ICategory } from "@/types";
 import { formatDate } from "@/lib/utils";
-import { PostEntrySkeleton } from "@/types";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { IAsset, ICategory, PostEntrySkeleton } from "@/types";
+
+import DynamicImage from "./dynamic-image";
 
 const PostCard = ({
   post,
@@ -25,22 +26,10 @@ const PostCard = ({
         <Link href={`/post/${post.fields.slug}`}>
           <CardTitle>
             <AspectRatio ratio={16 / 9}>
-              <Image
-                // loader={(p) => `${p.src}?w=${p.width}&q=${p.quality || 75}`}
-                src={`https:${
-                  (post.fields.coverImage as IAsset).fields.file.url
-                }`}
-                alt={(post.fields.coverImage as IAsset).fields.title}
-                // width={
-                //   (post.fields.coverImage as IAsset).fields.file.details.image
-                //     .width
-                // }
-                // height={
-                //   (post.fields.coverImage as IAsset).fields.file.details.image
-                //   .height
-                // }
-                fill
+              <DynamicImage
+                image={post.fields.coverImage as IAsset}
                 className="rounded-md object-cover w-full"
+                fill
               />
             </AspectRatio>
           </CardTitle>

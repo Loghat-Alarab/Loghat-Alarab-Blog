@@ -1,7 +1,10 @@
-export const revalidate = 3600;
+// export const revalidate = 3600;
+
+export const dynamicParams = true;
+
+import type { Metadata } from "next";
 
 import Link from "next/link";
-import type { Metadata } from "next";
 
 import {
   Breadcrumb,
@@ -10,19 +13,21 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { getPost } from "@/lib/actions";
+import { IAsset, ICategory } from "@/types";
+import { getAllPosts, getPost } from "@/lib/actions";
+
 import PostBody from "@/components/main/post-body";
 import PostHeader from "@/components/main/post-header";
 import PreviewAlert from "@/components/main/preview-alert";
-import { IAsset, ICategory } from "@/types";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   // fetch data
-  const { post } = await getPost(params.slug);
+  const slug = (await params).slug;
+  const { post } = await getPost(slug);
 
   return {
     title: post.fields.title,
@@ -35,14 +40,23 @@ export async function generateMetadata({
       ],
     },
     alternates: {
-      canonical: `/post/${params.slug}`,
+      canonical: `/post/${slug}`,
     },
   };
 }
 
-const Post = async ({ params }: { params: { slug: string } }) => {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
-  const { post, isEnabled } = await getPost(params.slug);
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+
+  return posts.map((post) => ({
+    slug: post.fields.slug,
+  }));
+}
+
+const Post = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const slug = (await params).slug;
+
+  const { post, isEnabled } = await getPost(slug);
 
   return (
     <section>

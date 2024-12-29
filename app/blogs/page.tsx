@@ -1,7 +1,6 @@
-export const revalidate = 3600;
+import type { Metadata } from "next";
 
 import Link from "next/link";
-import type { Metadata } from "next";
 
 import {
   Pagination,
@@ -19,8 +18,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { LIMIT } from "@/lib/constants";
+import { LIMIT } from "@/constants";
 import { getPostsByType } from "@/lib/actions";
+
 import PostCard from "@/components/main/post-card";
 
 export const metadata: Metadata = {
@@ -30,11 +30,17 @@ export const metadata: Metadata = {
   },
 };
 
-const Blogs = async ({ searchParams }: { searchParams: { page: string } }) => {
-  const blogs = await getPostsByType("blogs", Number(searchParams.page));
+const Blogs = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: string }>;
+}) => {
+  const page = (await searchParams).page;
+
+  const blogs = await getPostsByType("blogs", Number(page));
 
   const getCanNext = blogs.length === LIMIT;
-  const getCanPrevious = Number(searchParams.page) > 1;
+  const getCanPrevious = Number(page) > 1;
 
   return (
     <section>
@@ -72,9 +78,7 @@ const Blogs = async ({ searchParams }: { searchParams: { page: string } }) => {
             <PaginationItem>
               <PaginationPrevious
                 href={`/blogs${
-                  Number(searchParams.page) === 2
-                    ? ""
-                    : `?page=${Number(searchParams.page) - 1}`
+                  Number(page) === 2 ? "" : `?page=${Number(page) - 1}`
                 }`}
               />
             </PaginationItem>
@@ -83,26 +87,22 @@ const Blogs = async ({ searchParams }: { searchParams: { page: string } }) => {
             <PaginationItem>
               <PaginationLink
                 href={`/blogs${
-                  Number(searchParams.page) === 2
-                    ? ""
-                    : `?page=${Number(searchParams.page) - 1}`
+                  Number(page) === 2 ? "" : `?page=${Number(page) - 1}`
                 }`}
               >
-                {Number(searchParams.page) - 1}
+                {Number(page) - 1}
               </PaginationLink>
             </PaginationItem>
           )}
           <PaginationItem>
             <PaginationLink href="#" isActive>
-              {searchParams.page ?? 1}
+              {page ?? 1}
             </PaginationLink>
           </PaginationItem>
           {getCanNext && (
             <PaginationItem>
-              <PaginationLink
-                href={`/blogs?page=${Number(searchParams.page ?? 1) + 1}`}
-              >
-                {Number(searchParams.page ?? 1) + 1}
+              <PaginationLink href={`/blogs?page=${Number(page ?? 1) + 1}`}>
+                {Number(page ?? 1) + 1}
               </PaginationLink>
             </PaginationItem>
           )}
@@ -111,9 +111,7 @@ const Blogs = async ({ searchParams }: { searchParams: { page: string } }) => {
           </PaginationItem> */}
           {getCanNext && (
             <PaginationItem>
-              <PaginationNext
-                href={`/blogs?page=${Number(searchParams.page ?? 1) + 1}`}
-              />
+              <PaginationNext href={`/blogs?page=${Number(page ?? 1) + 1}`} />
             </PaginationItem>
           )}
         </PaginationContent>

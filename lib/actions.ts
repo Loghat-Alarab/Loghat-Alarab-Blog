@@ -1,11 +1,13 @@
-"use server";
+import "server-only";
 
 import { draftMode } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { getPlaiceholder } from "plaiceholder";
 
-import { CategoryEntrySkeleton, PostEntrySkeleton } from "@/types";
+// import { wait } from "./utils";
+import { LIMIT } from "@/constants";
 import { client, previewClient } from "./contentful";
-import { LIMIT } from "./constants";
+import { CategoryEntrySkeleton, PostEntrySkeleton } from "@/types";
 
 export const getCategories = async (type: string) => {
   const response = await client.getEntries<CategoryEntrySkeleton>({
@@ -56,7 +58,7 @@ export const getPostsByCategory = async (category: string, page?: number) => {
 };
 
 export const getPost = async (slug: string) => {
-  const { isEnabled } = draftMode();
+  const { isEnabled } = await draftMode();
   const cfClient = isEnabled ? previewClient : client;
 
   const response = await cfClient.getEntries<PostEntrySkeleton>({
@@ -68,9 +70,17 @@ export const getPost = async (slug: string) => {
     notFound();
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await wait(3000);
 
   return { post: response.items.at(0)!, isEnabled };
+};
+
+export const getAllPosts = async () => {
+  const response = await client.getEntries<PostEntrySkeleton>({
+    content_type: "post",
+  });
+
+  return response.items;
 };
 
 export const getPostsByQuery = async (query: string, page?: number) => {
@@ -91,7 +101,7 @@ export const getLatestPosts = async (page?: number) => {
 
   const response = await client.getEntries<PostEntrySkeleton>({
     content_type: "post",
-    // @ts-ignore
+    // @ts-expect-error not same
     order: "-sys.createdAt",
     limit: LIMIT,
     skip: skipAmount,
@@ -107,4 +117,14 @@ export const getSpecialPost = async () => {
   });
 
   return response.items.at(0);
+};
+
+export const getImage = async (src: string) => {
+  const buffer = await fetch(src).then(async (res) =>
+    Buffer.from(await res.arrayBuffer())
+  );
+
+  const plaiceholder = await getPlaiceholder(buffer, { size: 10 });
+
+  return plaiceholder;
 };

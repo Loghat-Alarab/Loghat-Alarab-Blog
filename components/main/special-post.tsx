@@ -1,18 +1,18 @@
-import Image from "next/image";
-import Link from "next/link";
 import { Entry } from "contentful";
+
+import Link from "next/link";
 
 import { formatDate } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { IAsset, ICategory, PostEntrySkeleton } from "@/types";
+
+import DynamicImage from "./dynamic-image";
 
 const SpecialPost = ({
   post,
 }: {
   post: Entry<PostEntrySkeleton, undefined, string>;
 }) => {
-  console.log(post);
-
   return (
     <>
       <p className="mb-6">المميز</p>
@@ -20,22 +20,10 @@ const SpecialPost = ({
         <div className="sm:w-1/2">
           <Link href={`/post/${post.fields.slug}`}>
             <AspectRatio ratio={16 / 9}>
-              <Image
-                // loader={(p) => `${p.src}?w=${p.width}&q=${p.quality || 75}`}
-                src={`https:${
-                  (post.fields.coverImage as IAsset).fields.file.url
-                }`}
-                alt={(post.fields.coverImage as IAsset).fields.title}
-                // width={
-                //   (post.fields.coverImage as IAsset).fields.file.details.image
-                //     .width
-                // }
-                // height={
-                //   (post.fields.coverImage as IAsset).fields.file.details.image
-                //     .height
-                // }
-                fill
+              <DynamicImage
+                image={post.fields.coverImage as IAsset}
                 className="rounded-md object-cover w-full"
+                fill
               />
             </AspectRatio>
           </Link>

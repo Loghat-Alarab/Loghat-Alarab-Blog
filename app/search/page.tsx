@@ -1,7 +1,6 @@
-export const revalidate = 0;
+import type { Metadata } from "next";
 
 import Link from "next/link";
-import type { Metadata } from "next";
 
 import {
   Pagination,
@@ -19,37 +18,39 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { LIMIT } from "@/lib/constants";
+import { LIMIT } from "@/constants";
 import { getPostsByQuery } from "@/lib/actions";
+
 import PostCard from "@/components/main/post-card";
 
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: { query: string };
+  searchParams: Promise<{ query: string; page: string }>;
 }): Promise<Metadata> {
   // fetch data
+  const query = (await searchParams).query;
 
   return {
-    title: `نتائج البحث عن ${searchParams.query}`,
+    title: `نتائج البحث عن ${query}`,
   };
 }
 
 const Search = async ({
   searchParams,
 }: {
-  searchParams: { query: string; page: string };
+  searchParams: Promise<{ query: string; page: string }>;
 }) => {
-  const posts = await getPostsByQuery(
-    searchParams.query,
-    Number(searchParams.page)
-  );
+  const page = (await searchParams).page;
+  const query = (await searchParams).query;
+
+  const posts = await getPostsByQuery(query, Number(page));
   const params = new URLSearchParams({
-    query: searchParams.query,
+    query: query,
   });
 
   const getCanNext = posts.length === LIMIT;
-  const getCanPrevious = Number(searchParams.page) > 1;
+  const getCanPrevious = Number(page) > 1;
 
   return (
     <section>
@@ -63,7 +64,7 @@ const Search = async ({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{searchParams.query}</BreadcrumbPage>
+              <BreadcrumbPage>{query}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -84,11 +85,9 @@ const Search = async ({
             <PaginationItem>
               <PaginationPrevious
                 href={`/search${
-                  Number(searchParams.page) === 2
+                  Number(page) === 2
                     ? `?${params.toString()}`
-                    : `?${params.toString()}&page=${
-                        Number(searchParams.page) - 1
-                      }`
+                    : `?${params.toString()}&page=${Number(page) - 1}`
                 }`}
               />
             </PaginationItem>
@@ -97,30 +96,28 @@ const Search = async ({
             <PaginationItem>
               <PaginationLink
                 href={`/search${
-                  Number(searchParams.page) === 2
+                  Number(page) === 2
                     ? `?${params.toString()}`
-                    : `?${params.toString()}&page=${
-                        Number(searchParams.page) - 1
-                      }`
+                    : `?${params.toString()}&page=${Number(page) - 1}`
                 }`}
               >
-                {Number(searchParams.page) - 1}
+                {Number(page) - 1}
               </PaginationLink>
             </PaginationItem>
           )}
           <PaginationItem>
             <PaginationLink href="#" isActive>
-              {searchParams.page ?? 1}
+              {page ?? 1}
             </PaginationLink>
           </PaginationItem>
           {getCanNext && (
             <PaginationItem>
               <PaginationLink
                 href={`/search?${params.toString()}&page=${
-                  Number(searchParams.page ?? 1) + 1
+                  Number(page ?? 1) + 1
                 }`}
               >
-                {Number(searchParams.page ?? 1) + 1}
+                {Number(page ?? 1) + 1}
               </PaginationLink>
             </PaginationItem>
           )}
@@ -131,7 +128,7 @@ const Search = async ({
             <PaginationItem>
               <PaginationNext
                 href={`/search?${params.toString()}&page=${
-                  Number(searchParams.page ?? 1) + 1
+                  Number(page ?? 1) + 1
                 }`}
               />
             </PaginationItem>
