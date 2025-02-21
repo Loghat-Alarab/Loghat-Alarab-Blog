@@ -7,6 +7,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { IAsset, ICategory, PostEntrySkeleton } from "@/types";
 
 import DynamicImage from "./dynamic-image";
+import { Card } from "../ui/card";
 
 const SpecialPost = ({
   post,
@@ -16,7 +17,7 @@ const SpecialPost = ({
   return (
     <>
       <p className="mb-6">المميز</p>
-      <div className="flex flex-col sm:flex-row mb-10 bg-card p-6 rounded-lg lg:w-3/4 mx-auto">
+      <Card className="flex flex-col sm:flex-row mb-10 p-6 lg:w-3/4 mx-auto">
         <div className="sm:w-1/2">
           <Link href={`/post/${post.fields.slug}`}>
             <AspectRatio ratio={16 / 9}>
@@ -47,7 +48,7 @@ const SpecialPost = ({
           </Link>
           <p className="text-sm font-light">{formatDate(post.fields.date)}</p>
         </div>
-      </div>
+      </Card>
     </>
   );
 };
