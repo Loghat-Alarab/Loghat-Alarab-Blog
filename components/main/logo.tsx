@@ -1,13 +1,14 @@
 import Image from "next/image";
 
-import whiteLogo from "@/public/logo-white.svg";
+// import whiteLogo from "@/public/logo-white.svg";
 import blackLogo from "@/public/logo-black.svg";
+import mainLogo from "@/public/logo-main.svg";
 
 const Logo = () => {
   return (
     <>
       <Image
-        src={whiteLogo}
+        src={mainLogo}
         alt="Logo"
         width={150}
         className="hidden dark:inline w-[150px]"

@@ -1,161 +1,119 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 142.1 100% 95%;
-    --foreground: 142.1 5% 0%;
-    --card: 142.1 50% 90%;
-    --card-foreground: 142.1 5% 10%;
-    --popover: 142.1 100% 95%;
-    --popover-foreground: 142.1 100% 0%;
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 142.1 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 104.1 30% 85%;
-    --muted-foreground: 142.1 5% 35%;
-    --accent: 104.1 30% 80%;
-    --accent-foreground: 142.1 5% 10%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 142.1 5% 90%;
-    --border: 142.1 30% 50%;
-    --input: 142.1 30% 18%;
-    --ring: 142.1 76.2% 36.3%;
-    --radius: 0.75rem;
-  }
-  .dark {
-    --background: 142.1 50% 5%;
-    --foreground: 142.1 5% 90%;
-    --card: 142.1 50% 0%;
-    --card-foreground: 142.1 5% 90%;
-    --popover: 142.1 50% 5%;
-    --popover-foreground: 142.1 5% 90%;
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 142.1 30% 10%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 104.1 30% 15%;
-    --muted-foreground: 142.1 5% 60%;
-    --accent: 104.1 30% 15%;
-    --accent-foreground: 142.1 5% 90%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 142.1 5% 90%;
-    --border: 142.1 30% 18%;
-    --input: 142.1 30% 18%;
-    --ring: 142.1 76.2% 36.3%;
-    --radius: 0.75rem;
-  }
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+  preferredStrategy: "pseudoelements";
+}
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
-  /* :root {
-    --background: 179 100% 95%;
-    --foreground: 179 5% 0%;
-    --card: 179 50% 90%;
-    --card-foreground: 179 5% 10%;
-    --popover: 179 100% 95%;
-    --popover-foreground: 179 100% 0%;
-    --primary: 179 73% 45%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 179 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 141 30% 85%;
-    --muted-foreground: 179 5% 35%;
-    --accent: 141 30% 80%;
-    --accent-foreground: 179 5% 10%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 179 5% 90%;
-    --border: 179 30% 50%;
-    --input: 179 30% 18%;
-    --ring: 179 73% 45%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 179 50% 5%;
-    --foreground: 179 5% 90%;
-    --card: 179 50% 0%;
-    --card-foreground: 179 5% 90%;
-    --popover: 179 50% 5%;
-    --popover-foreground: 179 5% 90%;
-    --primary: 179 73% 45%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 179 30% 10%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 141 30% 15%;
-    --muted-foreground: 179 5% 60%;
-    --accent: 141 30% 15%;
-    --accent-foreground: 179 5% 90%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 179 5% 90%;
-    --border: 179 30% 18%;
-    --input: 179 30% 18%;
-    --ring: 179 73% 45%;
-    --radius: 0.5rem;
-  } */
-  /* :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-  }
+@custom-variant dark (&:is(.dark *));
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  } */
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: hsl(51 0% 95%);
+  --foreground: hsl(51 0% 0%);
+  --card: hsl(51 0% 90%);
+  --card-foreground: hsl(51 0% 10%);
+  --popover: hsl(51 0% 95%);
+  --popover-foreground: hsl(51 95% 0%);
+  --primary: hsl(51 20% 52%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(51 10% 70%);
+  --secondary-foreground: hsl(0 0% 0%);
+  --muted: hsl(13 10% 85%);
+  --muted-foreground: hsl(51 0% 35%);
+  --accent: hsl(13 10% 80%);
+  --accent-foreground: hsl(51 0% 10%);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: hsl(51 0% 90%);
+  --border: hsl(51 20% 52%);
+  --input: hsl(51 20% 18%);
+  --ring: hsl(51 19.7% 52.2%);
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: hsl(51 10% 5%);
+  --foreground: hsl(51 0% 90%);
+  --card: hsl(51 0% 0%);
+  --card-foreground: hsl(51 0% 90%);
+  --popover: hsl(51 10% 5%);
+  --popover-foreground: hsl(51 0% 90%);
+  --primary: hsl(51 20% 52%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(51 10% 10%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(13 10% 15%);
+  --muted-foreground: hsl(51 0% 60%);
+  --accent: hsl(13 10% 15%);
+  --accent-foreground: hsl(51 0% 90%);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: hsl(51 0% 90%);
+  --border: hsl(51 20% 18%);
+  --input: hsl(51 20% 18%);
+  --ring: hsl(51 19.7% 52.2%);
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply h-full scroll-smooth scrollbar-track-secondary scrollbar-thumb-primary scrollbar-thin 
+    md:scrollbar scrollbar-active:scrollbar-thumb-primary/80 scrollbar-hover:scrollbar-thumb-primary/60 
+    scrollbar-thumb-rounded-full scrollbar-track-rounded-full;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-[100dvh] flex flex-col selection:bg-primary 
+    selection:text-primary-foreground caret-primary;
   }
   .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8;
+    @apply mx-auto px-0 sm:px-6 lg:px-8;
   }
 }

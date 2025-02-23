@@ -1,132 +1,61 @@
-import { ChevronDown } from "lucide-react";
+export const experimental_ppr = true;
+
+import { Suspense } from "react";
 
 import Link from "next/link";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "./theme-toggle";
-import { getCategories } from "@/lib/actions";
-import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ThemeToggle } from "@/components/main/theme-toggle";
 
-import Logo from "./logo";
-import MobileNav from "./mobile-nav";
-import SearchInput from "./search-input";
+import Logo from "@/components/main/logo";
+import NavLinks from "@/components/main/nav-links";
+import MobileNav from "@/components/main/mobile-nav";
+import UserButton from "@/components/auth/user-button";
+import SearchInput from "@/components/main/search-input";
 
 const Navbar = async () => {
-  const [blogs, characters, stories] = await Promise.all([
-    getCategories("blogs"),
-    getCategories("characters"),
-    getCategories("stories"),
-  ]);
-
   return (
-    <header>
-      <nav className="container p-4 flex justify-between items-center">
-        <Link href="/">
-          <div>
-            <Logo />
+    <header className="container sticky top-0 z-40 bg-background sm:py-4">
+      <nav
+        className="relative p-0 flex justify-between items-center before:absolute
+      before:w-full before:h-8 md:before:h-14 before:bg-primary before:top-full sm:before:rounded-b-3xl"
+      >
+        <div className="flex gap-x-6 lg:gap-x-8">
+          <Link href="/">
+            <div className="mx-4">
+              <Logo />
+            </div>
+          </Link>
+
+          <NavLinks />
+        </div>
+
+        <div className="flex items-center gap-x-2 lg:gap-x-4 mr-2">
+          <div
+            className="hidden md:flex max-w-32 lg:max-w-40 *:nth-[2]:hidden 
+          xl:max-w-64 xl:*:nth-[2]:flex gap-4"
+          >
+            <Suspense
+              fallback={<Skeleton className="md:w-32 lg:w-40 xl:w-44 h-10" />}
+            >
+              <UserButton />
+            </Suspense>
           </div>
-        </Link>
+          <div
+            className="relative flex gap-4 bg-primary p-3.5 rounded-tr-3xl sm:rounded-t-3xl before:absolute before:bottom-0
+          before:left-full before:w-10 before:h-10 before:bg-transparent before:rounded-3xl
+          before:[box-shadow:_-20px_20px_0_0_var(--primary)]"
+          >
+            <SearchInput />
 
-        <div className="flex gap-4">
-          <nav className="md:flex items-center gap-2 lg:gap-4 hidden">
-            <Button variant="ghost" asChild>
-              <Link href="/">الرئيسية</Link>
-            </Button>
-            <DropdownMenu dir="rtl">
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                  مقالات
-                  <ChevronDown size={15} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>المقالات</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Link href="/blogs">
-                  <DropdownMenuItem className="cursor-pointer">
-                    جميع المقالات
-                  </DropdownMenuItem>
-                </Link>
-                {blogs.map((blog) => (
-                  <Link
-                    key={blog.fields.slug}
-                    href={`/blogs/${blog.fields.slug}`}
-                  >
-                    <DropdownMenuItem className="cursor-pointer">
-                      {blog.fields.name}
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu dir="rtl">
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                  شخصيات
-                  <ChevronDown size={15} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>الشخصيات</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Link href="/characters">
-                  <DropdownMenuItem className="cursor-pointer">
-                    جميع الشخصيات
-                  </DropdownMenuItem>
-                </Link>
-                {characters.map((character) => (
-                  <Link
-                    key={character.fields.slug}
-                    href={`/characters/${character.fields.slug}`}
-                  >
-                    <DropdownMenuItem className="cursor-pointer">
-                      {character.fields.name}
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu dir="rtl">
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                  قصص و عبر
-                  <ChevronDown size={15} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>القصص و العبر</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Link href="/stories">
-                  <DropdownMenuItem className="cursor-pointer">
-                    جميع القصص و العبر
-                  </DropdownMenuItem>
-                </Link>
-                {stories.map((story) => (
-                  <Link
-                    key={story.fields.slug}
-                    href={`/stories/${story.fields.slug}`}
-                  >
-                    <DropdownMenuItem className="cursor-pointer">
-                      {story.fields.name}
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </nav>
+            <ThemeToggle />
 
-          <ThemeToggle />
-
-          <SearchInput />
-
-          <MobileNav blogs={blogs} characters={characters} stories={stories} />
+            <MobileNav>
+              <Suspense fallback={<Skeleton className="w-full h-10" />}>
+                <UserButton />
+              </Suspense>
+            </MobileNav>
+          </div>
         </div>
       </nav>
     </header>

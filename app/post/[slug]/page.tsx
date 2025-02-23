@@ -1,8 +1,9 @@
-// export const revalidate = 3600;
-
+export const revalidate = 3600;
 export const dynamicParams = true;
+export const experimental_ppr = true;
 
 import type { Metadata } from "next";
+import { BeatLoader } from "react-spinners";
 
 import Link from "next/link";
 
@@ -13,19 +14,20 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { IAsset, ICategory } from "@/types";
-import { getAllPosts, getPost } from "@/lib/actions";
+import { IAsset, ICategory, IType } from "@/types";
+import { getAllPosts, getPost } from "@/lib/data/posts";
 
 import PostBody from "@/components/main/post-body";
 import PostHeader from "@/components/main/post-header";
 import PreviewAlert from "@/components/main/preview-alert";
+import { Suspense } from "react";
+import RatingAndComments from "@/components/sections/post/rating-and-comments";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  // fetch data
   const slug = (await params).slug;
   const { post } = await getPost(slug);
 
@@ -59,9 +61,9 @@ const Post = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { post, isEnabled } = await getPost(slug);
 
   return (
-    <section>
+    <section id="post" className="pt-14 md:pt-20 px-4">
       {isEnabled && <PreviewAlert />}
-      <div className="my-10">
+      <div className="mb-10">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -72,36 +74,58 @@ const Post = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href={`/${post.fields.type}`}>
-                  {post.fields.type === "blogs"
-                    ? "مقالات"
-                    : post.fields.type === "characters"
-                    ? "شخصيات"
-                    : "قصص و عبر"}
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
                 <Link
-                  href={`/${post.fields.type}/${
-                    (post.fields.category as ICategory).fields.slug
+                  href={`/works/${
+                    (post.fields.type as unknown as IType).fields.slug
                   }`}
                 >
-                  {(post.fields.category as ICategory).fields.name}
+                  {(post.fields.type as unknown as IType).fields.name}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
+            {post.fields.category && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      href={`/works/${
+                        (post.fields.type as unknown as IType).fields.slug
+                      }/${
+                        (post.fields.category as unknown as ICategory).fields
+                          .slug
+                      }`}
+                    >
+                      {
+                        (post.fields.category as unknown as ICategory).fields
+                          .name
+                      }
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="container">
-        <article className="prose dark:prose-invert lg:prose-h1:leading-[60px] prose-sm sm:prose-base lg:prose-lg mx-auto">
+      <section id="article-container">
+        <article className="prose dark:prose-invert lg:prose-h1:leading-[60px] prose-base sm:prose-lg lg:prose-xl mx-auto">
           <PostHeader post={post} />
           <PostBody post={post} />
         </article>
-      </div>
+      </section>
+
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center">
+            <BeatLoader color="#9D966D" size={50} />
+          </div>
+        }
+      >
+        <RatingAndComments slug={slug} />
+      </Suspense>
+
+      {/* <MorePosts /> */}
     </section>
   );
 };

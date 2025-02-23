@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { IAsset } from "@/types";
-import { getImage } from "@/lib/actions";
+import { getImage } from "@/lib/actions/image-placeholder";
 
 const DynamicImage = async ({
   image,

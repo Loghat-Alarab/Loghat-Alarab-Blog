@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import withPlaicehodler from "@plaiceholder/next";
 
 const nextConfig: NextConfig = {
   images: {
@@ -13,6 +12,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    ppr: "incremental",
+    authInterrupts: true,
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
+  },
 };
 
-export default withPlaicehodler(nextConfig);
+export default nextConfig;

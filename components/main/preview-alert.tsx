@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const PreviewAlert = () => {
   return (
-    <div className="bg-destructive text-destructive-foreground p-4 text-2xl text-center rounded-md space-y-4">
+    <div className="mb-4 bg-destructive text-destructive-foreground p-4 text-2xl text-center rounded-md space-y-4">
       <p>انت الآن في وضع العرض !</p>
       <p>
         <Link

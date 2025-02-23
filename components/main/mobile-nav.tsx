@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 
@@ -12,127 +13,44 @@ import {
   SheetTrigger,
   SheetContent,
 } from "@/components/ui/sheet";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
-import { Entry } from "contentful";
+import { links } from "@/constants";
 import { Button } from "@/components/ui/button";
-import { CategoryEntrySkeleton } from "@/types";
 
-import Logo from "./logo";
+import Logo from "@/components/main/logo";
 
-type MobileNaveProps = {
-  blogs: Entry<CategoryEntrySkeleton, undefined, string>[];
-  characters: Entry<CategoryEntrySkeleton, undefined, string>[];
-  stories: Entry<CategoryEntrySkeleton, undefined, string>[];
-};
+interface MobileNavProps {
+  children: React.ReactNode;
+}
 
-const MobileNav = ({ blogs, characters, stories }: MobileNaveProps) => {
+const MobileNav = ({ children }: MobileNavProps) => {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden">
-          <Menu size={25} />
+        <Button variant="secondary" size="icon" className="md:hidden">
+          <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="md:hidden">
+      <SheetContent side="right" className="md:hidden py-4">
         <SheetHeader>
-          <SheetTitle>
+          <SheetTitle className="mx-auto">
             <Logo />
           </SheetTitle>
-          <Link href="/">
-            <p
-              onClick={() => setOpen(false)}
-              className="text-start py-4 border-y hover:underline"
-            >
-              الرئيسية
-            </p>
-          </Link>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="item-1">
-              <AccordionTrigger>مقالات</AccordionTrigger>
-              <AccordionContent>
-                <Link href="/blogs">
-                  <p
-                    onClick={() => setOpen(false)}
-                    className="text-start py-4 hover:underline"
-                  >
-                    جميع المقالات
-                  </p>
-                </Link>
-                {blogs.map((blog) => (
-                  <Link
-                    key={blog.fields.slug}
-                    href={`/blogs/${blog.fields.slug}`}
-                  >
-                    <p
-                      onClick={() => setOpen(false)}
-                      className="text-start py-4 hover:underline"
-                    >
-                      {blog.fields.name}
-                    </p>
-                  </Link>
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>شخصيات</AccordionTrigger>
-              <AccordionContent>
-                <Link href="/characters">
-                  <p
-                    onClick={() => setOpen(false)}
-                    className="text-start py-4 hover:underline"
-                  >
-                    جميع الشخصيات
-                  </p>
-                </Link>
-                {characters.map((character) => (
-                  <Link
-                    key={character.fields.slug}
-                    href={`/characters/${character.fields.slug}`}
-                  >
-                    <p
-                      onClick={() => setOpen(false)}
-                      className="text-start py-4 hover:underline"
-                    >
-                      {character.fields.name}
-                    </p>
-                  </Link>
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>قصص و عبر</AccordionTrigger>
-              <AccordionContent>
-                <Link href="/stories">
-                  <p
-                    onClick={() => setOpen(false)}
-                    className="text-start py-4 hover:underline"
-                  >
-                    جميع القصص و العبر
-                  </p>
-                </Link>
-                {stories.map((story) => (
-                  <Link
-                    key={story.fields.slug}
-                    href={`/stories/${story.fields.slug}`}
-                  >
-                    <p
-                      onClick={() => setOpen(false)}
-                      className="text-start py-4 hover:underline"
-                    >
-                      {story.fields.name}
-                    </p>
-                  </Link>
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          {links.map((link) => (
+            <Link key={link.label} href={link.href}>
+              <p
+                onClick={() => setOpen(false)}
+                className={`text-start py-4 border-b hover:underline ${
+                  pathname === link.href && "text-primary"
+                }`}
+              >
+                {link.label}
+              </p>
+            </Link>
+          ))}
+          <div className="flex my-2 justify-evenly">{children}</div>
         </SheetHeader>
       </SheetContent>
     </Sheet>

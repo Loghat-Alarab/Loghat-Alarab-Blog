@@ -8,7 +8,7 @@ const NotFound = () => {
       <p className="text-2xl text-center">هذه الصفحة غير موجودة</p>
       <div className="my-10 flex items-center justify-center">
         <Link href="/">
-          <Button>العودة للصفحة الرئيسية</Button>
+          <Button className="cursor-pointer">العودة للصفحة الرئيسية</Button>
         </Link>
       </div>
     </section>

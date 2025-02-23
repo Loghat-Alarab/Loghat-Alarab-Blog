@@ -1,26 +1,27 @@
 import type { Metadata } from "next";
-import { Almarai } from "next/font/google";
+import { Zain } from "next/font/google";
 
 import "./globals.css";
+import "@smastrom/react-rating/style.css";
 
-import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 import Navbar from "@/components/main/navbar";
 import Footer from "@/components/main/footer";
 
-const alamari = Almarai({
-  subsets: ["arabic"],
-  weight: ["300", "400", "700", "800"],
+const zain = Zain({
+  subsets: ["arabic", "latin"],
+  weight: ["200", "300", "400", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.loghat-alarab.online"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL as string),
   title: {
     default: "لغة العرب",
     template: "%s - لغة العرب",
   },
-  description: "مقالات و شخصيات كما لم تقرأها من قبل.",
+  description:
+    "اكتشف عالمًا من القصص الشيقة والمقالات الملهمة والمعرفة العميقة. انغمس في جمال اللغة العربية، واستمتع بروائع الأدب والفكر والثقافة. سواء كنت تبحث عن الإلهام، التعلم، أو الاستمتاع بقراءة ممتعة، فأنت في المكان الصحيح.",
   twitter: {
     card: "summary_large_image",
   },
@@ -30,19 +31,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body
-        className={cn(
-          alamari.className,
-          "min-h-[100dvh] flex flex-col selection:bg-primary"
-        )}
-      >
+      <body className={zain.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -51,7 +47,9 @@ export default function RootLayout({
         >
           <Navbar />
 
-          <main className="container grow">{children}</main>
+          <main className="container grow flex items-stretch *:basis-full">
+            {children}
+          </main>
 
           <Footer />
         </ThemeProvider>

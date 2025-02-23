@@ -12,8 +12,6 @@ export async function GET(request: NextRequest) {
   const secret = searchParams.get("secret");
   const slug = searchParams.get("slug");
 
-  console.log({ secret, slug });
-
   // Check the secret and next parameters
   // This secret should only be known to this route handler and the CMS
   if (secret !== process.env.CONTENTFUL_PREVIEW_SECRET || !slug) {

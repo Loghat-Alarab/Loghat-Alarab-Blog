@@ -2,7 +2,8 @@ const Footer = () => {
   return (
     <footer className="container">
       <p className="text-center p-2 text-[8px] md:text-sm">
-        لغة العرب &copy; 2024. جميع الحقوق محفوظة. تم إنشاؤه بواسطة{" "}
+        لغة العرب &copy; {new Date().getFullYear()}. جميع الحقوق محفوظة. تم
+        إنشاؤه بواسطة{" "}
         <a
           // href="https://www.joe-official.site"
           href="#"
