@@ -17,7 +17,7 @@ interface PasswordResetProps {
   resetLink?: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_DOMAIN ?? "";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
 export const PasswordReset = ({ resetLink }: PasswordResetProps) => {
   return (

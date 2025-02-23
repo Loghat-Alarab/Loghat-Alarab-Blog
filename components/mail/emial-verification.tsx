@@ -17,7 +17,7 @@ interface EmailVerificationProps {
   verificationLink?: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_DOMAIN ?? "";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
 export const EmailVerification = ({
   verificationLink,
