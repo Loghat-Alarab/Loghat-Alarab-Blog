@@ -1,4 +1,4 @@
-import { use } from "react";
+import { Suspense, use } from "react";
 
 import { AuthWrapper } from "@/components/auth/auth-wrapper";
 import { VerifyEmailForm } from "@/components/auth/verify-email-form";
@@ -17,7 +17,9 @@ const VerifyEmail = ({ searchParams }: VerifyEmailProps) => {
       switchButtonLabel="العودة لتسجيل الدخول"
       switchButtonTitle=""
     >
-      <VerifyEmailForm callbackURL={callbackURL} />
+      <Suspense>
+        <VerifyEmailForm callbackURL={callbackURL} />
+      </Suspense>
     </AuthWrapper>
   );
 };

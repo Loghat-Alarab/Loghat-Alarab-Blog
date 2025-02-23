@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { Header } from "@/components/auth/header";
 import { Social } from "@/components/auth/social";
 import { SwitchButton } from "@/components/auth/switch-button";
@@ -28,7 +30,11 @@ export const AuthWrapper = ({
         label={switchButtonLabel}
       />
       {children}
-      {showSocials && <Social />}
+      {showSocials && (
+        <Suspense>
+          <Social />
+        </Suspense>
+      )}
     </div>
   );
 };

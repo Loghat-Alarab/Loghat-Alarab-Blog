@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { AuthWrapper } from "@/components/auth/auth-wrapper";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 
@@ -9,7 +11,9 @@ const ResetPassword = () => {
       switchButtonLabel="العودة لتسجيل الدخول"
       switchButtonTitle=""
     >
-      <ResetPasswordForm />
+      <Suspense>
+        <ResetPasswordForm />
+      </Suspense>
     </AuthWrapper>
   );
 };
