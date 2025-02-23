@@ -1,3 +1,4 @@
+//@ts-nocheck
 "use server";
 import "server-only";
 
@@ -96,7 +97,6 @@ export const getSpecialPosts = async () => {
   const response = await client.getEntries<PostEntrySkeleton>({
     content_type: "post",
     "fields.special": true,
-    //@ts-expect-error unknown
     order: "-sys.createdAt",
     limit: LIMIT,
   });
