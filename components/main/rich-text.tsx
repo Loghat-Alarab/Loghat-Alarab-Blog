@@ -38,11 +38,12 @@ const options: Options = {
       return <p>{children}</p>;
     },
 
-    [INLINES.ENTRY_HYPERLINK]: (node) => {
+    [INLINES.ENTRY_HYPERLINK]: (node, children) => {
       if (node.data.target.sys.contentType.sys.id === "post") {
         return (
           <Link href={`/post/${node.data.target.fields.slug}`}>
-            {node.data.target.fields.title}
+            {/* {node.data.target.fields.title} */}
+            {children}
           </Link>
         );
       }

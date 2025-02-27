@@ -132,7 +132,7 @@ const MainCarousal = () => {
         {/* <CarouselPrevious />
         <CarouselNext /> */}
       </Carousel>
-      <div className="mt-4 md:my-10 flex justify-center items-center gap-x-4 z-10">
+      <div className="mt-4 md:my-10 flex justify-center items-center gap-x-4 z-20">
         {scrollSnaps.map((_, index) => (
           <div
             key={index}
